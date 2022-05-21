@@ -1,0 +1,36 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug executable 'yaml-patcher'",
+      "cargo": {
+        "args": ["build", "--bin=yaml-patcher", "--package=yaml-patcher"],
+        "filter": {
+          "name": "yaml-patcher",
+          "kind": "bin"
+        }
+      },
+      "args": ["-b", "example/base.yaml", "-p", "example/patch.yaml"],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in executable 'yaml-patcher'",
+      "cargo": {
+        "args": ["test", "--no-run", "--bin=yaml-patcher", "--package=yaml-patcher"],
+        "filter": {
+          "name": "yaml-patcher",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

@@ -1,7 +1,4 @@
-use {
-    anyhow::*,
-    yaml_rust::{yaml::*},
-};
+use {anyhow::*, yaml_rust::yaml::*};
 
 pub fn apply_patch(base: &mut Yaml, mut patch: Vec<Yaml>) -> Result<()> {
     for item in patch.drain(..) {
@@ -35,15 +32,28 @@ pub fn apply_change(mut item: &mut Yaml, path: &str, new_value: Yaml) -> Result<
                         hash.insert(Yaml::String(key.to_string()), new_value);
                         return Ok(());
                     }
+                    Yaml::Array(arr) => {
+                        if key != "+" {
+                            bail!("expected '+' for array append");
+                        }
+                        match new_value {
+                            Yaml::Array(new_arr) => {
+                                arr.extend(new_arr);
+                                return Ok(());
+                            }
+                            _ => bail!("expected array for append"),
+                        }
+                    }
                     _ => {
-                        bail!("map expected for assignation of {:?}", key);
+                        bail!("map or array expected for assignation of {:?}", key);
                     }
                 }
             } else {
                 // not last: we go deeper
                 let idx = key.parse::<usize>();
                 match idx {
-                    Ok(idx) => { // it's an array index
+                    Ok(idx) => {
+                        // it's an array index
                         match item {
                             Yaml::Array(array) => {
                                 item = array
@@ -55,7 +65,8 @@ pub fn apply_change(mut item: &mut Yaml, path: &str, new_value: Yaml) -> Result<
                             }
                         }
                     }
-                    _ => { // it's a map key
+                    _ => {
+                        // it's a map key
                         match item {
                             Yaml::Hash(hash) => {
                                 item = hash
@@ -76,5 +87,3 @@ pub fn apply_change(mut item: &mut Yaml, path: &str, new_value: Yaml) -> Result<
     eprintln!("failed to assign {:?}", path);
     Ok(())
 }
-
-

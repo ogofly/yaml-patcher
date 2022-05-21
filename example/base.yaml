@@ -1,0 +1,10 @@
+root:
+  first:
+    - arr0: arr0-val
+    - arr1: arr1-val
+  second:
+    - arr0: arr0-val
+    - arr1: arr1-val
+  third:
+    a: A
+    b: B

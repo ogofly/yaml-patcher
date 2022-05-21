@@ -28,80 +28,60 @@ This is a simplified example for a real use-case: modifying a Mkdocs file in a b
 ## Base file
 
 ```yaml
-site_name: OurApp
-site_description: 'App Usage & Configuration'
-site_url: https://oursite.com/our-app/
-dev_addr: '127.0.0.1:8666'
-nav:
-        - Usage:
-                - Modules & Menus: menus-modules.md
-                - Product Finder: product-finder.md
-                - Product Viewer: product-viewer.md
-                - Rules Editor: ed.md
-                - Flow Editor: flow-editor.md
-        - Concepts:
-                - Flakes: flakes.md
-                - Product Genealogy: tracking.md
-                - TRT Flows: trt.md
-                - Scheduling: scheduling.md
-        - Configuration:
-                - Installation: install.md
-                - World: world.md
-                - KB: kb.md
-                - Resc: resc.md
-                - Nginx: nginx.md
-                - Internationalization: i18n.md
-extra_javascript:
-        - js/autoclose-tree.js
-        - js/filter.js
+root:
+  first:
+    - arr0: arr0-val
+    - arr1: arr1-val
+  second:
+    - arr0: arr0-val
+    - arr1: arr1-val
+  third:
+    a: A
+    b: B
 ```
 
 ## Patch file
 
 ```yaml
-site_description: 'Vroum Vroum'
-site_url: http://ourclient.com/some/path
-nav 0 Usage:
-        - Product Finder: product-finder.md
-        - Product Viewer: product-viewer.md
-nav 2 Configuration:
-        - World: world.md
-        - KB: kb.md
+# replace item
+root first 1 arr1 : arr1-replace
+
+# append array
+root second + : 
+  - arr00: arr00-append
+  - arr11: arr00-append
+
+# replace
+root third b : B-replace
 ```
 
 ## Result
 
 ```bash
-yaml-patcher -b mkdocs.yml -p our-client-patch.yml > our-client/mkdocs.yml
+yaml-patcher -b ./example/base.yaml -p example/patch.yaml
 ```
 
 ```yaml
-site_name: OurApp
-edit_uri: ""
-dev_addr: "127.0.0.1:8666"
-nav:
-    - Usage:
-         - Modules & Menus: menus-modules.md
-         - Product Finder: product-finder.md
-         - Product Viewer: product-viewer.md
-    - Concepts:
-         - Flakes: flakes.md
-         - Product Genealogy: tracking.md
-         - TRT Flows: trt.md
-         - Scheduling: scheduling.md
-    - Configuration:
-         - World: world.md
-         - KB: kb.md
-extra_javascript:
-    - js/autoclose-tree.js
-    - js/filter.js
-site_description: Vroum Vroum
-site_url: "http://some/other/url"
+---
+root:
+  first:
+    - arr0: arr0-val
+    - arr1: arr1-replace
+  second:
+    - arr0: arr0-val
+    - arr1: arr1-val
+    - arr00: arr00-append
+    - arr11: arr00-append
+  third:
+    a: A
+    b: B-replace
 ```
+
 
 # Features
 
-Right now yaml-patcher only change existing values to new values, because this covers my current needs.
+- change existing values to new values
+- append new value to array
 
 I might add new features, like removing values, or adding them, or applying pattern based replacements.
 

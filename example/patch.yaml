@@ -1,0 +1,11 @@
+
+# replace item
+root first 1 arr1 : arr1-replace
+
+# append array
+root second + : 
+  - arr00: arr00-append
+  - arr11: arr00-append
+
+# replace
+root third b : B-replace
