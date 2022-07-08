@@ -1,4 +1,7 @@
-use {anyhow::*, yaml_rust::yaml::*};
+use {
+    anyhow::{anyhow, bail, Result},
+    yaml_rust::yaml::*,
+};
 
 pub fn apply_patch(base: &mut Yaml, mut patch: Vec<Yaml>) -> Result<()> {
     for item in patch.drain(..) {
